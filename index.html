@@ -7,7 +7,7 @@
 <meta name="description" content="Krave Cafe & Deli — the Upper East Side's 24-hour deli. Bacon egg & cheese, paninis, salad bar, groceries & more. 4.7★ from 150+ reviews. 1399 2nd Ave, NYC. Call (646) 964-5256.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -39,7 +39,10 @@
     --mustard-deep:#e8a800;
     --ketchup:#e5432d;
     --radius:18px;
+    --paper:#f2ead9;
+    --ease:cubic-bezier(.22,1,.36,1);
   }
+  a:focus-visible,button:focus-visible{outline:2px solid var(--mustard);outline-offset:3px;border-radius:6px}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
@@ -87,7 +90,18 @@
   .logo{font-family:'Anton',sans-serif;font-size:26px;letter-spacing:.04em;color:var(--cream)}
   .logo span{color:var(--mustard)}
   .nav-links{display:flex;gap:34px;font-size:14px;font-weight:600;color:var(--cream-dim)}
+  .nav-links a{
+    position:relative;padding-bottom:3px;
+    transition:color .3s var(--ease);
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;
+    width:100%;height:1.5px;background:var(--mustard);
+    transform:scaleX(0);transform-origin:right;
+    transition:transform .35s var(--ease);
+  }
   .nav-links a:hover{color:var(--mustard)}
+  .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
   .nav-cta{
     background:var(--mustard);color:var(--ink);
     font-weight:800;font-size:14px;
@@ -100,19 +114,39 @@
   /* ---------- hero ---------- */
   header.hero{
     position:relative;
-    padding:96px 24px 80px;
+    min-height:calc(100svh - 132px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:96px 24px 90px;
     text-align:center;
-    background:
-      radial-gradient(1100px 520px at 50% -10%, rgba(255,199,44,.14), transparent 62%),
-      linear-gradient(rgba(13,11,8,.84), rgba(13,11,8,.9) 55%, var(--ink)),
-      url("images/storefront.png") center 38%/cover no-repeat var(--ink);
+    overflow:hidden;
+    background:radial-gradient(1100px 520px at 50% -10%, rgba(255,199,44,.14), transparent 62%) var(--ink);
   }
+  .hero-bg{
+    position:absolute;inset:-14% 0;z-index:0;
+    background:
+      linear-gradient(rgba(13,11,8,.84), rgba(13,11,8,.9) 55%, var(--ink)),
+      url("images/storefront.png") center 38%/cover no-repeat;
+    will-change:transform;
+  }
+  /* staged hero entrance */
+  @keyframes riseIn{to{transform:translateY(0)}}
+  @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+  .hline{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+  .hline > span{display:inline-block;transform:translateY(112%);animation:riseIn 1s var(--ease) forwards}
+  .hline:nth-child(1) > span{animation-delay:.15s}
+  .hline:nth-child(2) > span{animation-delay:.32s}
+  .fx{opacity:0;transform:translateY(18px);animation:fadeUp .9s var(--ease) forwards}
+  .fx-1{animation-delay:.05s}
+  .fx-2{animation-delay:1s}
+  .fx-3{animation-delay:1.15s}
+  .fx-4{animation-delay:1.3s}
+  .fx-5{animation-delay:1.5s}
   .hero::after{
     content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
     background-image:radial-gradient(rgba(246,239,227,.05) 1px, transparent 1px);
     background-size:26px 26px;
   }
-  .hero > *{position:relative;z-index:1}
+  .hero > :not(.hero-bg){position:relative;z-index:1}
   .eyebrow{
     display:inline-flex;align-items:center;gap:10px;
     border:1px solid rgba(255,199,44,.4);
@@ -140,13 +174,28 @@
   .btn{
     display:inline-flex;align-items:center;gap:10px;
     font-weight:800;font-size:16px;
-    padding:17px 34px;border-radius:999px;
-    transition:transform .15s ease, background .15s ease, color .15s ease;
+    padding:18px 38px;border-radius:999px;
+    transition:transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease), box-shadow .3s var(--ease);
   }
-  .btn-primary{background:var(--mustard);color:var(--ink)}
-  .btn-primary:hover{background:var(--cream);transform:translateY(-2px)}
+  .btn:active{transform:translateY(0) scale(.98)}
+  .btn-primary{background:var(--mustard);color:var(--ink);box-shadow:0 0 0 0 rgba(255,199,44,0)}
+  .btn-primary:hover{background:var(--cream);transform:translateY(-2px);box-shadow:0 14px 34px -12px rgba(255,199,44,.45)}
   .btn-ghost{border:1.5px solid rgba(246,239,227,.3);color:var(--cream)}
   .btn-ghost:hover{border-color:var(--mustard);color:var(--mustard);transform:translateY(-2px)}
+  .link-arrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-weight:700;font-size:16px;color:var(--cream);
+    padding:18px 6px;position:relative;
+  }
+  .link-arrow::after{
+    content:"";position:absolute;left:6px;right:6px;bottom:12px;height:1.5px;
+    background:var(--mustard);transform:scaleX(0);transform-origin:right;
+    transition:transform .35s var(--ease);
+  }
+  .link-arrow .ar{transition:transform .35s var(--ease)}
+  .link-arrow:hover{color:var(--mustard)}
+  .link-arrow:hover::after{transform:scaleX(1);transform-origin:left}
+  .link-arrow:hover .ar{transform:translateX(5px)}
   .hero-badges{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin-top:44px;font-size:13px;font-weight:600;color:var(--cream-dim)}
   .hero-badges span::before{content:"✓";color:var(--mustard);font-weight:800;margin-right:8px}
 
@@ -165,9 +214,10 @@
     width:max-content;
   }
   @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .marquee:hover .marquee-track{animation-play-state:paused}
 
   /* ---------- sections ---------- */
-  section{padding:96px 0}
+  section{padding:clamp(96px,11vw,150px) 0}
   .sec-label{
     color:var(--mustard);font-size:13px;font-weight:800;
     letter-spacing:.24em;text-transform:uppercase;margin-bottom:14px;
@@ -186,7 +236,8 @@
     position:relative;overflow:hidden;
     transition:transform .18s ease, border-color .18s ease;
   }
-  .card:hover{transform:translateY(-5px);border-color:rgba(255,199,44,.45)}
+  .card{transition:transform .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease)}
+  .card:hover{transform:translateY(-6px);border-color:rgba(255,199,44,.4);box-shadow:0 24px 48px -20px rgba(0,0,0,.55)}
   .card-img{
     display:block;
     width:calc(100% + 56px);
@@ -240,20 +291,36 @@
   .btn-dark{background:var(--ink);color:var(--mustard)}
   .btn-dark:hover{background:var(--ink-3);transform:translateY(-2px)}
 
-  /* ---------- reviews ---------- */
-  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px}
-  .rev{
-    background:var(--ink-2);
-    border:1px solid rgba(246,239,227,.08);
-    border-radius:var(--radius);
-    padding:32px 28px;
-    display:flex;flex-direction:column;gap:16px;
+  /* ---------- reviews (light chapter) ---------- */
+  .light{
+    background:linear-gradient(180deg, var(--ink) 0%, var(--paper) 9%, var(--paper) 91%, var(--ink) 100%);
+    padding-top:clamp(140px,15vw,200px);
+    padding-bottom:clamp(140px,15vw,200px);
   }
-  .rev q{font-size:16px;color:var(--cream);font-weight:500;quotes:"\201C" "\201D"}
-  .rev .who{margin-top:auto;font-size:13.5px;color:var(--cream-dim);font-weight:600}
-  .rev .who b{color:var(--cream);display:block;font-size:14.5px}
+  .light .sec-label{color:#a67300}
+  .light .sec-title{color:var(--ink)}
+  .light .sec-sub{color:#6b6353}
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:64px}
+  .rev{
+    background:#fffdf6;
+    border:1px solid rgba(13,11,8,.08);
+    border-radius:var(--radius);
+    padding:34px 30px;
+    display:flex;flex-direction:column;gap:16px;
+    box-shadow:0 12px 34px -18px rgba(13,11,8,.18);
+    transition:transform .45s var(--ease), box-shadow .45s var(--ease);
+  }
+  .rev:hover{transform:translateY(-5px);box-shadow:0 22px 44px -18px rgba(13,11,8,.26)}
+  .rev .stars{color:#d99a00}
+  .rev q{
+    font-family:'Fraunces',Georgia,serif;font-style:italic;
+    font-size:17.5px;line-height:1.55;color:var(--ink);quotes:"\201C" "\201D";
+  }
+  .rev .who{margin-top:auto;font-size:13.5px;color:#8a8172;font-weight:600}
+  .rev .who b{color:var(--ink);display:block;font-size:14.5px;font-weight:800}
   .big-rating{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-  .big-rating .num{font-family:'Anton',sans-serif;font-size:88px;color:var(--mustard);line-height:1}
+  .big-rating .num{font-family:'Anton',sans-serif;font-size:88px;color:var(--ink);line-height:1}
+  .light .big-rating .stars{color:#d99a00}
 
   /* ---------- visit ---------- */
   .visit-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
@@ -340,12 +407,21 @@
     background:repeating-conic-gradient(var(--ketchup) 0% 25%, #f6efe3 0% 50%) 0 0/36px 36px;
   }
 
+  /* ---------- closer ---------- */
+  .closer{text-align:center;padding:clamp(120px,14vw,180px) 24px}
+  .closer .sec-label{margin-bottom:22px}
+  .closer h2{font-size:clamp(48px,8vw,104px);color:var(--cream);margin-bottom:26px}
+  .closer h2 span{color:var(--mustard)}
+  .closer p{color:var(--cream-dim);font-size:17px;max-width:440px;margin:0 auto 42px}
+
   /* ---------- scroll reveal ---------- */
-  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
   .reveal.in{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){
     .reveal{opacity:1;transform:none;transition:none}
     .ff,.marquee-track,.bar .dot{animation:none}
+    .hline > span{transform:none;animation:none}
+    .fx{opacity:1;transform:none;animation:none}
   }
 
   @media(max-width:900px){
@@ -383,26 +459,28 @@
 </nav>
 
 <header class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="float-food" aria-hidden="true">
-    <span class="ff" style="top:14%;left:7%;font-size:44px;animation-delay:0s">🥪</span>
-    <span class="ff" style="top:58%;left:4%;font-size:34px;animation-delay:-2.4s">☕</span>
-    <span class="ff" style="top:22%;right:8%;font-size:38px;animation-delay:-4.1s">🥯</span>
-    <span class="ff" style="top:64%;right:5%;font-size:42px;animation-delay:-1.3s">🍓</span>
-    <span class="ff" style="top:84%;left:14%;font-size:30px;animation-delay:-5.2s">🥐</span>
-    <span class="ff" style="top:88%;right:16%;font-size:32px;animation-delay:-3s">🧃</span>
+    <span class="ff" style="top:16%;left:7%;font-size:42px;animation-delay:0s">🥪</span>
+    <span class="ff" style="top:60%;left:5%;font-size:32px;animation-delay:-2.4s">☕</span>
+    <span class="ff" style="top:22%;right:8%;font-size:36px;animation-delay:-4.1s">🥯</span>
+    <span class="ff" style="top:66%;right:6%;font-size:38px;animation-delay:-1.3s">🍓</span>
   </div>
-  <div class="eyebrow">Upper East Side · New York</div>
-  <h1>Your 3AM Kraving<br>has an <span class="hl">address.</span></h1>
-  <p class="sub">Crispy paninis, legendary bacon egg &amp; cheese, a fully-stocked salad bar — and the lights are always on. Krave is the UES deli that never sleeps.</p>
-  <div class="proof">
+  <div class="eyebrow fx fx-1">Upper East Side · New York</div>
+  <h1>
+    <span class="hline"><span>Your 3AM Kraving</span></span>
+    <span class="hline"><span>has an <span class="hl">address.</span></span></span>
+  </h1>
+  <p class="sub fx fx-2">Crispy paninis, legendary bacon egg &amp; cheese, a fully-stocked salad bar — and the lights are always on. Krave is the UES deli that never sleeps.</p>
+  <div class="proof fx fx-3">
     <span class="stars">★★★★★</span>
     <span><b>4.7</b> rating · <b>150+</b> Google reviews · <b>$10–20</b> per person</span>
   </div>
-  <div class="hero-ctas">
+  <div class="hero-ctas fx fx-4">
     <a class="btn btn-primary" href="tel:+16469645256">☎ Order Pickup Now</a>
-    <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=Krave+Cafe+%26+Deli+1399+2nd+Ave+New+York+NY+10021" target="_blank" rel="noopener">Get Directions →</a>
+    <a class="link-arrow" href="https://www.google.com/maps/search/?api=1&query=Krave+Cafe+%26+Deli+1399+2nd+Ave+New+York+NY+10021" target="_blank" rel="noopener">Get Directions <span class="ar">→</span></a>
   </div>
-  <div class="hero-badges">
+  <div class="hero-badges fx fx-5">
     <span>Open 24 Hours</span>
     <span>Drive-Through</span>
     <span>No-Contact Delivery</span>
@@ -518,7 +596,7 @@
 </div>
 <div class="gingham" aria-hidden="true"></div>
 
-<section id="reviews">
+<section id="reviews" class="light">
   <div class="wrap">
     <div class="sec-label">⭐ Word on the Street</div>
     <h2 class="sec-title">4.7 stars. 150 reviews.<br>Zero attitude.</h2>
@@ -595,6 +673,13 @@
   </div>
 </section>
 
+<section class="closer">
+  <div class="sec-label">One Last Thing</div>
+  <h2>Hungry yet?<br><span>We're open.</span></h2>
+  <p>Right now. At 3PM or 3AM. Second Ave &amp; 73rd — come as you are.</p>
+  <a class="btn btn-primary" href="tel:+16469645256">☎ Call (646) 964-5256</a>
+</section>
+
 <footer>
   <div class="wrap foot-inner">
     <div>
@@ -662,11 +747,20 @@
     counters.forEach(function(el){cio.observe(el)});
   }
 
-  // gentle parallax on hero food
+  // parallax depth: background drifts slower than foreground
   var ff = document.querySelector('.float-food');
-  if(ff && !reduced){
+  var bg = document.querySelector('.hero-bg');
+  if(!reduced && (ff || bg)){
+    var ticking = false;
     window.addEventListener('scroll', function(){
-      ff.style.transform = 'translateY(' + window.scrollY * 0.18 + 'px)';
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        var y = window.scrollY;
+        if(bg) bg.style.transform = 'translateY(' + y * 0.22 + 'px)';
+        if(ff) ff.style.transform = 'translateY(' + y * 0.14 + 'px)';
+        ticking = false;
+      });
     }, {passive:true});
   }
 })();
